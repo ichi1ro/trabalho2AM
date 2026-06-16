@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dados baixados do Kaggle
+data/raw/
+data/processed/
+
+# Resultados gerados
+outputs/
+
+# Caches e logs
+.cache/
+*.log
+
+# Sistema/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Credenciais Kaggle, se existirem no projeto
+kaggle.json
