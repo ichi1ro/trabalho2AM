@@ -27,6 +27,37 @@ Esse modo gera todos os arquivos de resultado e graficos, mas usa validacao cruz
 python src/train_evaluate.py --full --n-jobs 2
 ```
 
+## Rodar com GPU no Google Colab
+
+1. No menu do Colab, selecione `Runtime > Change runtime type`.
+2. Em `Hardware accelerator`, escolha `T4 GPU`.
+3. Execute:
+
+```bash
+pip install -r requirements-colab.txt
+python src/download_data.py
+python src/train_evaluate_gpu_colab.py --folds 5
+```
+
+Para testar mais rapido antes da execucao final:
+
+```bash
+python src/train_evaluate_gpu_colab.py --folds 3 --sample-size 6000
+```
+
+A versao GPU treina:
+
+- XGBoost com `device="cuda"`.
+- CatBoost com `task_type="GPU"`.
+- MLP em PyTorch usando CUDA.
+
+As saidas ficam em:
+
+- `outputs/results_gpu/model_results_gpu.csv`
+- `outputs/results_gpu/resultados_gpu.md`
+- `outputs/figures_gpu/gpu_01_comparacao_modelos.png`
+- `outputs/figures_gpu/gpu_02_real_vs_predito.png`
+
 ## Recriar os resultados
 
 ```powershell

@@ -36,11 +36,24 @@ python src/download_data.py
 python src/train_evaluate.py --full --n-jobs 2
 ```
 
+## Execucao com GPU no Google Colab
+
+No Colab, selecione `Runtime > Change runtime type > T4 GPU` e rode:
+
+```bash
+pip install -r requirements-colab.txt
+python src/download_data.py
+python src/train_evaluate_gpu_colab.py --folds 5
+```
+
+Essa versao usa XGBoost GPU, CatBoost GPU e uma MLP em PyTorch/CUDA. As saidas ficam em `outputs/results_gpu` e `outputs/figures_gpu`.
+
 ## Arquivos principais
 
 - `notebooks/trabalho_agro_previsao_safra.ipynb`: notebook para entregar ou rodar no Colab.
 - `src/download_data.py`: baixa/copia os CSVs do Kaggle.
 - `src/train_evaluate.py`: prepara dados, treina modelos, gera resultados e graficos.
+- `src/train_evaluate_gpu_colab.py`: versao para Google Colab com GPU.
 - `outputs/results/resultados.md`: resumo dos resultados.
 - `outputs/results/model_results.csv`: metricas dos modelos.
 - `outputs/figures/*.png`: graficos para slides.

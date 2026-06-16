@@ -26,6 +26,12 @@ Yan et al. (2025), "Crop Yield Time-Series Data Prediction Based on Multiple Hyb
 - Random Forest Regressor.
 - MLP Regressor.
 
+## Tecnicas da versao GPU
+
+- XGBoost GPU.
+- CatBoost GPU.
+- MLP PyTorch CUDA.
+
 ## Metricas
 
 - RMSE.
@@ -40,3 +46,5 @@ Yan et al. (2025), "Crop Yield Time-Series Data Prediction Based on Multiple Hyb
 ## Observacao importante
 
 O computador local ficou lento com a configuracao completa. Por isso, o script agora usa modo rapido por padrao. A versao completa deve ser rodada no Google Colab ou em uma maquina com mais recursos.
+
+Para usar GPU no Colab, rode `src/train_evaluate_gpu_colab.py`. Essa versao salva os resultados em `outputs/results_gpu`.
