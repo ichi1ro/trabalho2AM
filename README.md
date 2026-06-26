@@ -48,6 +48,12 @@ python src/train_evaluate_gpu_colab.py --folds 5
 
 Essa versao usa XGBoost GPU, CatBoost GPU e uma MLP em PyTorch/CUDA. As saidas ficam em `outputs/results_gpu` e `outputs/figures_gpu`.
 
+Se o treinamento GPU ja terminou e voce quiser apenas recriar as figuras:
+
+```bash
+python src/regenerate_gpu_figures.py
+```
+
 ## Arquivos principais
 
 - `notebooks/trabalho_agro_previsao_safra.ipynb`: notebook para entregar ou rodar no Colab.

@@ -55,8 +55,27 @@ As saidas ficam em:
 
 - `outputs/results_gpu/model_results_gpu.csv`
 - `outputs/results_gpu/resultados_gpu.md`
-- `outputs/figures_gpu/gpu_01_comparacao_modelos.png`
-- `outputs/figures_gpu/gpu_02_real_vs_predito.png`
+- `outputs/figures_gpu/gpu_01_distribuicao_rendimento.png`
+- `outputs/figures_gpu/gpu_02_matriz_correlacao.png`
+- `outputs/figures_gpu/gpu_03_rendimento_por_cultura.png`
+- `outputs/figures_gpu/gpu_04_comparacao_modelos.png`
+- `outputs/figures_gpu/gpu_05_erros_modelos.png`
+- `outputs/figures_gpu/gpu_06_r2_modelos.png`
+- `outputs/figures_gpu/gpu_07_real_vs_predito_melhor_modelo.png`
+- `outputs/figures_gpu/gpu_08_residuos_melhor_modelo.png`
+- `outputs/figures_gpu/gpu_09_residuos_por_modelo.png`
+- `outputs/figures_gpu/gpu_10_real_vs_predito_por_modelo.png`
+- `outputs/figures_gpu/gpu_11_rendimento_medio_por_ano.png`
+- `outputs/figures_gpu/gpu_12_chuva_vs_rendimento.png`
+- `outputs/figures_gpu/gpu_13_temperatura_vs_rendimento.png`
+
+Se o treinamento ja terminou e voce quer apenas recriar as figuras:
+
+```bash
+python src/regenerate_gpu_figures.py
+```
+
+Observacao: o grafico antigo `gpu_01_comparacao_modelos.png` foi mantido, mas agora usa dois paineis. RMSE/MAE ficam em um eixo e R2 em outro, porque R2 fica invisivel quando e colocado na mesma escala dos erros.
 
 ## Recriar os resultados
 

@@ -18,6 +18,10 @@ outputs/
 # Caches e logs
 .cache/
 *.log
+*.zip
+
+# Pacotes/exportacoes locais
+resultados_trabalho2/
 
 # Sistema/editor
 .DS_Store

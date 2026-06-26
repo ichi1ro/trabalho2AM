@@ -42,6 +42,16 @@ FINAL_FEATURES = [
     "yield_lag_1",
     "yield_rolling_mean_3",
 ]
+NUMERIC_FEATURES = [
+    "Year",
+    "average_rain_fall_mm_per_year",
+    "pesticides_tonnes",
+    "avg_temp",
+    "temp_squared",
+    "rain_temp_interaction",
+    "yield_lag_1",
+    "yield_rolling_mean_3",
+]
 
 
 def set_seed(seed: int) -> None:
@@ -303,6 +313,202 @@ def save_outputs(df: pd.DataFrame, results: pd.DataFrame, predictions: pd.DataFr
     best_col = f"pred_{best_name}"
 
     sns.set_theme(style="whitegrid")
+
+    plt.figure(figsize=(9, 5))
+    sns.histplot(df[TARGET], bins=40, color="#2f6f6d")
+    plt.title("Distribuicao do rendimento agricola")
+    plt.xlabel("Rendimento (hg/ha)")
+    plt.ylabel("Frequencia")
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_01_distribuicao_rendimento.png", dpi=180)
+    plt.close()
+
+    plt.figure(figsize=(10, 6))
+    corr = df[NUMERIC_FEATURES + [TARGET]].corr(numeric_only=True)
+    sns.heatmap(corr, cmap="vlag", center=0, annot=False)
+    plt.title("Correlacao entre atributos numericos")
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_02_matriz_correlacao.png", dpi=180)
+    plt.close()
+
+    top_items = df.groupby("Item")[TARGET].median().sort_values(ascending=False)
+    plt.figure(figsize=(10, 5))
+    sns.barplot(x=top_items.values, y=top_items.index, color="#6b8e23")
+    plt.title("Mediana do rendimento por cultura")
+    plt.xlabel("Rendimento mediano (hg/ha)")
+    plt.ylabel("Cultura")
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_03_rendimento_por_cultura.png", dpi=180)
+    plt.close()
+
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+    error_df = results.melt(
+        id_vars="modelo",
+        value_vars=["RMSE", "MAE"],
+        var_name="metrica",
+        value_name="valor",
+    )
+    sns.barplot(data=error_df, x="modelo", y="valor", hue="metrica", ax=axes[0])
+    axes[0].set_title("Erros dos modelos GPU")
+    axes[0].set_xlabel("Modelo")
+    axes[0].set_ylabel("Erro em hg/ha")
+    axes[0].tick_params(axis="x", rotation=12)
+
+    sns.barplot(data=results, x="modelo", y="R2", color="#4c78a8", ax=axes[1])
+    axes[1].set_title("R2 dos modelos GPU")
+    axes[1].set_xlabel("Modelo")
+    axes[1].set_ylabel("R2")
+    axes[1].set_ylim(max(0, results["R2"].min() - 0.02), 1.0)
+    axes[1].tick_params(axis="x", rotation=12)
+    for container in axes[1].containers:
+        axes[1].bar_label(container, fmt="%.4f", fontsize=9)
+    fig.suptitle("Comparacao dos modelos GPU")
+    fig.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_04_comparacao_modelos.png", dpi=180)
+    # Nome antigo mantido para nao quebrar o roteiro/notebook anterior.
+    plt.savefig(FIG_DIR / "gpu_01_comparacao_modelos.png", dpi=180)
+    plt.close()
+
+    plt.figure(figsize=(8, 5))
+    sns.barplot(data=error_df, x="modelo", y="valor", hue="metrica")
+    plt.title("RMSE e MAE dos modelos GPU")
+    plt.xlabel("Modelo")
+    plt.ylabel("Erro em hg/ha")
+    plt.xticks(rotation=12)
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_05_erros_modelos.png", dpi=180)
+    plt.close()
+
+    plt.figure(figsize=(8, 5))
+    sns.barplot(data=results, x="modelo", y="R2", color="#4c78a8")
+    plt.title("R2 dos modelos GPU")
+    plt.xlabel("Modelo")
+    plt.ylabel("R2")
+    plt.ylim(max(0, results["R2"].min() - 0.02), 1.0)
+    plt.xticks(rotation=12)
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_06_r2_modelos.png", dpi=180)
+    plt.close()
+
+    plt.figure(figsize=(6, 6))
+    sns.scatterplot(x=predictions["actual"], y=predictions[best_col], s=14, alpha=0.35)
+    max_value = max(predictions["actual"].max(), predictions[best_col].max())
+    plt.plot([0, max_value], [0, max_value], color="#b22222", linewidth=1.5)
+    plt.title(f"Real vs predito - {best_name}")
+    plt.xlabel("Rendimento real (hg/ha)")
+    plt.ylabel("Rendimento predito (hg/ha)")
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_07_real_vs_predito_melhor_modelo.png", dpi=180)
+    # Nome antigo mantido para nao quebrar o roteiro/notebook anterior.
+    plt.savefig(FIG_DIR / "gpu_02_real_vs_predito.png", dpi=180)
+    plt.close()
+
+    residuals = predictions[best_col] - predictions["actual"]
+    plt.figure(figsize=(9, 5))
+    sns.histplot(residuals, bins=50, color="#7f3c8d")
+    plt.axvline(0, color="#222222", linewidth=1)
+    plt.title(f"Distribuicao dos residuos - {best_name}")
+    plt.xlabel("Predito - real (hg/ha)")
+    plt.ylabel("Frequencia")
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_08_residuos_melhor_modelo.png", dpi=180)
+    plt.close()
+
+    residual_rows = []
+    for col in [c for c in predictions.columns if c.startswith("pred_")]:
+        residual_rows.append(
+            pd.DataFrame(
+                {
+                    "modelo": col.replace("pred_", ""),
+                    "residuo": predictions[col] - predictions["actual"],
+                }
+            )
+        )
+    residual_df = pd.concat(residual_rows, ignore_index=True)
+    if len(residual_df) > 15000:
+        residual_df = residual_df.sample(15000, random_state=42)
+    plt.figure(figsize=(10, 5))
+    sns.boxplot(data=residual_df, x="modelo", y="residuo")
+    plt.axhline(0, color="#222222", linewidth=1)
+    plt.title("Residuos por modelo GPU")
+    plt.xlabel("Modelo")
+    plt.ylabel("Predito - real (hg/ha)")
+    plt.xticks(rotation=12)
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_09_residuos_por_modelo.png", dpi=180)
+    plt.close()
+
+    model_order = results["modelo"].tolist()
+    pred_long = []
+    for model in model_order:
+        col = f"pred_{model}"
+        pred_long.append(
+            pd.DataFrame(
+                {
+                    "modelo": model,
+                    "real": predictions["actual"],
+                    "predito": predictions[col],
+                }
+            )
+        )
+    pred_long_df = pd.concat(pred_long, ignore_index=True)
+    if len(pred_long_df) > 18000:
+        pred_long_df = pred_long_df.sample(18000, random_state=42)
+    grid = sns.FacetGrid(pred_long_df, col="modelo", col_wrap=3, height=4, sharex=True, sharey=True)
+    grid.map_dataframe(sns.scatterplot, x="real", y="predito", s=10, alpha=0.28)
+    max_value = max(predictions["actual"].max(), predictions.filter(like="pred_").max().max())
+    for ax in grid.axes.flat:
+        ax.plot([0, max_value], [0, max_value], color="#b22222", linewidth=1)
+        ax.set_xlabel("Real (hg/ha)")
+        ax.set_ylabel("Predito (hg/ha)")
+    grid.fig.suptitle("Real vs predito por modelo GPU", y=1.03)
+    grid.tight_layout()
+    grid.savefig(FIG_DIR / "gpu_10_real_vs_predito_por_modelo.png", dpi=180)
+    plt.close()
+
+    plt.figure(figsize=(10, 5))
+    sns.lineplot(data=df.groupby("Year", as_index=False)[TARGET].mean(), x="Year", y=TARGET, marker="o")
+    plt.title("Rendimento medio por ano")
+    plt.xlabel("Ano")
+    plt.ylabel("Rendimento medio (hg/ha)")
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_11_rendimento_medio_por_ano.png", dpi=180)
+    plt.close()
+
+    plt.figure(figsize=(10, 5))
+    sns.scatterplot(
+        data=df.sample(min(8000, len(df)), random_state=42),
+        x="average_rain_fall_mm_per_year",
+        y=TARGET,
+        hue="Item",
+        s=14,
+        alpha=0.45,
+        legend=False,
+    )
+    plt.title("Chuva anual vs rendimento")
+    plt.xlabel("Chuva media anual (mm)")
+    plt.ylabel("Rendimento (hg/ha)")
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_12_chuva_vs_rendimento.png", dpi=180)
+    plt.close()
+
+    plt.figure(figsize=(10, 5))
+    sns.scatterplot(
+        data=df.sample(min(8000, len(df)), random_state=42),
+        x="avg_temp",
+        y=TARGET,
+        hue="Item",
+        s=14,
+        alpha=0.45,
+        legend=False,
+    )
+    plt.title("Temperatura media vs rendimento")
+    plt.xlabel("Temperatura media")
+    plt.ylabel("Rendimento (hg/ha)")
+    plt.tight_layout()
+    plt.savefig(FIG_DIR / "gpu_13_temperatura_vs_rendimento.png", dpi=180)
+    plt.close()
+
     plt.figure(figsize=(10, 5))
     sns.barplot(
         data=results.melt(
@@ -316,19 +522,11 @@ def save_outputs(df: pd.DataFrame, results: pd.DataFrame, predictions: pd.DataFr
         hue="metrica",
     )
     plt.title("Comparacao dos modelos GPU")
+    plt.xlabel("Modelo")
+    plt.ylabel("Valor")
+    plt.xticks(rotation=12)
     plt.tight_layout()
-    plt.savefig(FIG_DIR / "gpu_01_comparacao_modelos.png", dpi=180)
-    plt.close()
-
-    plt.figure(figsize=(6, 6))
-    sns.scatterplot(x=predictions["actual"], y=predictions[best_col], s=14, alpha=0.35)
-    max_value = max(predictions["actual"].max(), predictions[best_col].max())
-    plt.plot([0, max_value], [0, max_value], color="#b22222", linewidth=1.5)
-    plt.title(f"Real vs predito - {best_name}")
-    plt.xlabel("Rendimento real (hg/ha)")
-    plt.ylabel("Rendimento predito (hg/ha)")
-    plt.tight_layout()
-    plt.savefig(FIG_DIR / "gpu_02_real_vs_predito.png", dpi=180)
+    plt.savefig(FIG_DIR / "gpu_14_comparacao_modelos_escala_unica.png", dpi=180)
     plt.close()
 
     summary = f"""# Resultados GPU - Google Colab
@@ -344,6 +542,22 @@ Modelos GPU: XGBoost GPU, CatBoost GPU e MLP PyTorch CUDA.
 {results.to_markdown(index=False)}
 
 Melhor modelo pelo menor RMSE: **{best_name}**.
+
+## Figuras geradas
+
+- `gpu_01_distribuicao_rendimento.png`
+- `gpu_02_matriz_correlacao.png`
+- `gpu_03_rendimento_por_cultura.png`
+- `gpu_04_comparacao_modelos.png`
+- `gpu_05_erros_modelos.png`
+- `gpu_06_r2_modelos.png`
+- `gpu_07_real_vs_predito_melhor_modelo.png`
+- `gpu_08_residuos_melhor_modelo.png`
+- `gpu_09_residuos_por_modelo.png`
+- `gpu_10_real_vs_predito_por_modelo.png`
+- `gpu_11_rendimento_medio_por_ano.png`
+- `gpu_12_chuva_vs_rendimento.png`
+- `gpu_13_temperatura_vs_rendimento.png`
 
 ## Comparacao com Estudo X
 
