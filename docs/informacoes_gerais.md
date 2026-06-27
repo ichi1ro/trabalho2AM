@@ -20,31 +20,40 @@ Kaggle `patelris/crop-yield-prediction-dataset`.
 
 Yan et al. (2025), "Crop Yield Time-Series Data Prediction Based on Multiple Hybrid Machine Learning Models".
 
-## Tecnicas de AM
+## Tecnicas de AM da execucao final
 
-- SVM LinearSVR.
-- Random Forest Regressor.
-- MLP Regressor.
-
-## Tecnicas da versao GPU
-
-- XGBoost GPU.
-- CatBoost GPU.
-- MLP PyTorch CUDA.
+- MLP Regressor em PyTorch.
+- XGBoost Regressor.
+- CatBoost Regressor.
 
 ## Metricas
 
-- RMSE.
-- MAE.
-- R2.
+- RMSE: erro quadratico medio com penalizacao maior para erros grandes. Quanto menor, melhor.
+- MAE: erro absoluto medio. Quanto menor, melhor.
+- R2: proporcao da variacao explicada pelo modelo. Quanto mais perto de 1, melhor.
 
 ## Validacao
 
-- Modo rapido/local: 3-fold externo e 2-fold interno no grid search.
-- Modo completo: 5-fold externo e 3-fold interno no grid search.
+A execucao final usou validacao cruzada k-fold no Google Colab com 27.644 registros apos engenharia de atributos temporais.
 
-## Observacao importante
+## Resultados finais
 
-O computador local ficou lento com a configuracao completa. Por isso, o script agora usa modo rapido por padrao. A versao completa deve ser rodada no Google Colab ou em uma maquina com mais recursos.
+| Modelo | RMSE | MAE | R2 |
+|---|---:|---:|---:|
+| MLP | 9225,74 | 4116,18 | 0,9883 |
+| XGBoost | 9362,52 | 3643,92 | 0,9879 |
+| CatBoost | 9409,89 | 3777,14 | 0,9878 |
 
-Para usar GPU no Colab, rode `src/train_evaluate_gpu_colab.py`. Essa versao salva os resultados em `outputs/results_gpu`.
+Melhor modelo por RMSE e R2: MLP.
+
+Melhor modelo por MAE: XGBoost.
+
+## Arquivos de resultado
+
+Os resultados finais estao em:
+
+`C:\Users\spook\Downloads\resultados_trabalho2\outputs\results_gpu`
+
+As figuras finais estao em:
+
+`C:\Users\spook\Downloads\resultados_trabalho2\outputs\figures_gpu`

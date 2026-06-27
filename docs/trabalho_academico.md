@@ -48,7 +48,7 @@ Foram selecionados 10 atributos finais, respeitando a exigencia de 8 a 12 variav
 5. Remover linhas sem historico anterior para as variaveis temporais.
 6. Separar `X` e `y`.
 7. Aplicar `ColumnTransformer`: imputacao, escalonamento numerico e one-hot encoding de variaveis categoricas.
-8. Treinar SVM, Random Forest e MLP com grid search.
+8. Treinar MLP, XGBoost e CatBoost com busca em grade.
 9. Avaliar com validacao cruzada.
 10. Gerar metricas, graficos e casos de uso.
 
@@ -58,48 +58,53 @@ Foram treinadas tres tecnicas de aprendizado de maquina:
 
 | Modelo | Papel no trabalho |
 |---|---|
-| SVM LinearSVR | Modelo de margem maxima para regressao. |
-| Random Forest Regressor | Ensemble baseado em arvores de decisao. |
-| MLP Regressor | Rede neural artificial rasa. |
+| MLP Regressor | Rede neural artificial que aprende relacoes nao lineares entre atributos e rendimento. |
+| XGBoost Regressor | Modelo de boosting com arvores; cada nova arvore tenta corrigir erros das anteriores. |
+| CatBoost Regressor | Modelo de boosting com arvores, semelhante ao XGBoost na ideia geral e forte para dados tabulares. |
 
-SVM e MLP usam `TransformedTargetRegressor` para padronizar o alvo durante o treinamento. Isso melhora a estabilidade porque `hg/ha_yield` tem escala numerica alta.
+Na execucao final do Colab, MLP, XGBoost e CatBoost foram usados porque sao modelos fortes para regressao tabular e conseguem explorar melhor o ambiente acelerado do Colab.
 
 ## 7. Resultados obtidos
 
-Resultados do modo rapido/local com 2.500 amostras:
+Resultados finais obtidos no Google Colab com 27.644 registros:
 
 | Modelo | RMSE | MAE | R2 |
 |---|---:|---:|---:|
-| SVM LinearSVR | 10202,52 | 3108,02 | 0,9861 |
-| Random Forest | 10735,80 | 3976,03 | 0,9847 |
-| MLP | 11899,04 | 6157,89 | 0,9812 |
+| MLP | 9225,74 | 4116,18 | 0,9883 |
+| XGBoost | 9362,52 | 3643,92 | 0,9879 |
+| CatBoost | 9409,89 | 3777,14 | 0,9878 |
 
-O melhor modelo local pelo menor RMSE foi SVM LinearSVR. O resultado em R2 ficou proximo do Estudo X, mas o MAE ficou maior. A comparacao deve ser interpretada com cuidado porque o trabalho local usou amostra e validacao cruzada rapida para evitar travamento do computador.
+O melhor modelo pelo menor RMSE foi a MLP. O XGBoost teve o menor MAE, indicando menor erro absoluto medio. Todos os modelos tiveram R2 acima de 0,987, o que indica alta capacidade de explicar a variacao do rendimento agricola no experimento.
+
+Comparando com o Estudo X, o R2 final da MLP foi 0,9883, acima dos valores reportados para Random Forest e Bagging no artigo (0,986) e tambem acima do XGBoost reportado no Estudo X (0,973). A comparacao deve considerar que o protocolo experimental nao e necessariamente identico, mas o resultado e competitivo.
 
 ## 8. Graficos gerados
 
-Os graficos estao em `outputs/figures`:
+Os graficos finais estao em `outputs/figures_gpu` dentro do pacote `resultados_trabalho2`:
 
-- `01_distribuicao_rendimento.png`: distribuicao do alvo.
-- `02_matriz_correlacao.png`: correlacao entre atributos numericos.
-- `03_rendimento_por_cultura.png`: rendimento mediano por cultura.
-- `04_comparacao_modelos.png`: metricas por modelo.
-- `05_real_vs_predito_melhor_modelo.png`: real versus predito.
-- `06_importancia_atributos.png`: importancia por permutacao.
+- `gpu_01_distribuicao_rendimento.png`: distribuicao do alvo.
+- `gpu_02_matriz_correlacao.png`: correlacao entre atributos numericos.
+- `gpu_03_rendimento_por_cultura.png`: rendimento mediano por cultura.
+- `gpu_04_comparacao_modelos.png`: comparacao entre MLP, XGBoost e CatBoost.
+- `gpu_05_erros_modelos.png`: RMSE e MAE por modelo.
+- `gpu_06_r2_modelos.png`: R2 por modelo.
+- `gpu_07_real_vs_predito_melhor_modelo.png`: real versus predito do melhor modelo.
+- `gpu_09_residuos_por_modelo.png`: residuos por modelo.
 
 ## 9. Limitacoes
 
-- O modo rapido usa amostra para viabilizar execucao local.
 - O atributo `yield_lag_1` e muito forte; isso melhora previsao, mas torna o problema mais dependente de historico.
 - O dataset e agregado por pais/cultura/ano, sem variaveis locais de solo, manejo ou estagio fenologico.
 - A comparacao com o Estudo X nao replica exatamente o mesmo split experimental.
+- XGBoost e CatBoost sao modelos muito fortes, mas menos intuitivos do que arvores de decisao simples.
 
 ## 10. Conclusao
 
-O trabalho atende aos requisitos do enunciado: dataset do Kaggle, tema de agronegocio, analise descritiva, selecao de 10 variaveis, tres tecnicas de AM, grid search, k-fold cross-validation, comparacao com artigo e geracao de resultados e graficos. Para a entrega final, recomenda-se rodar o modo completo no Google Colab e atualizar os valores da tabela de resultados.
+O trabalho atende aos requisitos do enunciado: dataset do Kaggle, tema de agronegocio, analise descritiva, selecao de 10 variaveis, tres tecnicas de AM, busca de hiperparametros, k-fold cross-validation, comparacao com artigo e geracao de resultados e graficos. A MLP obteve o melhor RMSE e o maior R2, enquanto o XGBoost obteve o menor MAE. Os resultados ficaram competitivos em relacao ao Estudo X.
 
 ## Referencias
 
 - Kaggle. Crop Yield Prediction Dataset. https://www.kaggle.com/datasets/patelris/crop-yield-prediction-dataset
 - Yan et al. (2025). Crop Yield Time-Series Data Prediction Based on Multiple Hybrid Machine Learning Models. https://arxiv.org/abs/2502.10405
 - Scikit-learn documentation. https://scikit-learn.org/stable/
+

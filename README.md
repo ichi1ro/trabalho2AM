@@ -11,32 +11,28 @@ Estudo X: Yan et al. (2025), "Crop Yield Time-Series Data Prediction Based on Mu
 - Download do dataset do Kaggle.
 - Engenharia de atributos para fechar 10 variaveis finais.
 - Analise exploratoria com graficos.
-- Treinamento de 3 tecnicas: SVM, Random Forest e rede neural MLP.
-- Grid Search com validacao cruzada.
+- Treinamento de 3 tecnicas: MLP, XGBoost e CatBoost.
+- Busca de hiperparametros com validacao cruzada.
 - Comparacao com Estudo X.
 - Resultados em Markdown, CSV e imagens PNG para slides.
 
-## Execucao rapida local
+## Resultados finais
 
-```powershell
-python -m pip install -r requirements.txt
-python src\download_data.py
-python src\train_evaluate.py --sample-size 2500 --n-jobs 1
-```
+Os resultados finais estao em:
 
-O modo rapido foi usado para nao travar computadores pessoais. Ele usa uma amostra e uma grade menor.
+`C:\Users\spook\Downloads\resultados_trabalho2\outputs`
 
-## Execucao completa
+| Modelo | RMSE | MAE | R2 |
+|---|---:|---:|---:|
+| MLP | 9225,74 | 4116,18 | 0,9883 |
+| XGBoost | 9362,52 | 3643,92 | 0,9879 |
+| CatBoost | 9409,89 | 3777,14 | 0,9878 |
 
-Use preferencialmente no Google Colab:
+Melhor modelo por RMSE e R2: MLP.
 
-```bash
-pip install -r requirements.txt
-python src/download_data.py
-python src/train_evaluate.py --full --n-jobs 2
-```
+Melhor modelo por MAE: XGBoost.
 
-## Execucao com GPU no Google Colab
+## Execucao no Google Colab
 
 No Colab, selecione `Runtime > Change runtime type > T4 GPU` e rode:
 
@@ -46,23 +42,33 @@ python src/download_data.py
 python src/train_evaluate_gpu_colab.py --folds 5
 ```
 
-Essa versao usa XGBoost GPU, CatBoost GPU e uma MLP em PyTorch/CUDA. As saidas ficam em `outputs/results_gpu` e `outputs/figures_gpu`.
-
-Se o treinamento GPU ja terminou e voce quiser apenas recriar as figuras:
+Para teste rapido:
 
 ```bash
-python src/regenerate_gpu_figures.py
+python src/train_evaluate_gpu_colab.py --folds 3 --sample-size 6000
 ```
 
 ## Arquivos principais
 
 - `notebooks/trabalho_agro_previsao_safra.ipynb`: notebook para entregar ou rodar no Colab.
 - `src/download_data.py`: baixa/copia os CSVs do Kaggle.
-- `src/train_evaluate.py`: prepara dados, treina modelos, gera resultados e graficos.
-- `src/train_evaluate_gpu_colab.py`: versao para Google Colab com GPU.
-- `outputs/results/resultados.md`: resumo dos resultados.
-- `outputs/results/model_results.csv`: metricas dos modelos.
-- `outputs/figures/*.png`: graficos para slides.
+- `src/train_evaluate_gpu_colab.py`: versao usada no Colab.
 - `docs/trabalho_academico.md`: texto base do trabalho.
 - `docs/roteiro_slides.md`: conteudo sugerido para slides.
 - `docs/instrucoes_execucao.md`: instrucoes detalhadas de execucao.
+- `docs/informacoes_gerais.md`: resumo geral do trabalho.
+- `docs/explicacao_codigo_treinamento.md`: explicacao didatica do codigo de treinamento.
+
+## Figuras finais
+
+As figuras finais usadas nos slides estao em:
+
+`C:\Users\spook\Downloads\resultados_trabalho2\outputs\figures_gpu`
+
+As principais sao:
+
+- `gpu_04_comparacao_modelos.png`
+- `gpu_05_erros_modelos.png`
+- `gpu_06_r2_modelos.png`
+- `gpu_07_real_vs_predito_melhor_modelo.png`
+- `gpu_09_residuos_por_modelo.png`

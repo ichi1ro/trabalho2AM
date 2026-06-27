@@ -113,7 +113,7 @@ def metrics_row(model_name: str, y: np.ndarray, pred: np.ndarray, params: dict) 
 
 
 def cross_validate_xgboost(
-    X: pd.DataFrame, y: np.ndarray, folds: int, seed: int
+    X: pd.DataFrame, y: np.ndarray, folds: int, seed: int, use_cuda: bool
 ) -> tuple[np.ndarray, dict]:
     grid = param_grid(
         {
@@ -135,7 +135,7 @@ def cross_validate_xgboost(
             model = XGBRegressor(
                 objective="reg:squarederror",
                 tree_method="hist",
-                device="cuda",
+                device="cuda" if use_cuda else "cpu",
                 eval_metric="rmse",
                 random_state=seed,
                 **params,
@@ -349,20 +349,20 @@ def save_outputs(df: pd.DataFrame, results: pd.DataFrame, predictions: pd.DataFr
         value_name="valor",
     )
     sns.barplot(data=error_df, x="modelo", y="valor", hue="metrica", ax=axes[0])
-    axes[0].set_title("Erros dos modelos GPU")
+    axes[0].set_title("Erros dos modelos")
     axes[0].set_xlabel("Modelo")
     axes[0].set_ylabel("Erro em hg/ha")
     axes[0].tick_params(axis="x", rotation=12)
 
     sns.barplot(data=results, x="modelo", y="R2", color="#4c78a8", ax=axes[1])
-    axes[1].set_title("R2 dos modelos GPU")
+    axes[1].set_title("R2 dos modelos")
     axes[1].set_xlabel("Modelo")
     axes[1].set_ylabel("R2")
     axes[1].set_ylim(max(0, results["R2"].min() - 0.02), 1.0)
     axes[1].tick_params(axis="x", rotation=12)
     for container in axes[1].containers:
         axes[1].bar_label(container, fmt="%.4f", fontsize=9)
-    fig.suptitle("Comparacao dos modelos GPU")
+    fig.suptitle("Comparacao dos modelos")
     fig.tight_layout()
     plt.savefig(FIG_DIR / "gpu_04_comparacao_modelos.png", dpi=180)
     # Nome antigo mantido para nao quebrar o roteiro/notebook anterior.
@@ -371,7 +371,7 @@ def save_outputs(df: pd.DataFrame, results: pd.DataFrame, predictions: pd.DataFr
 
     plt.figure(figsize=(8, 5))
     sns.barplot(data=error_df, x="modelo", y="valor", hue="metrica")
-    plt.title("RMSE e MAE dos modelos GPU")
+    plt.title("RMSE e MAE dos modelos")
     plt.xlabel("Modelo")
     plt.ylabel("Erro em hg/ha")
     plt.xticks(rotation=12)
@@ -381,7 +381,7 @@ def save_outputs(df: pd.DataFrame, results: pd.DataFrame, predictions: pd.DataFr
 
     plt.figure(figsize=(8, 5))
     sns.barplot(data=results, x="modelo", y="R2", color="#4c78a8")
-    plt.title("R2 dos modelos GPU")
+    plt.title("R2 dos modelos")
     plt.xlabel("Modelo")
     plt.ylabel("R2")
     plt.ylim(max(0, results["R2"].min() - 0.02), 1.0)
@@ -430,7 +430,7 @@ def save_outputs(df: pd.DataFrame, results: pd.DataFrame, predictions: pd.DataFr
     plt.figure(figsize=(10, 5))
     sns.boxplot(data=residual_df, x="modelo", y="residuo")
     plt.axhline(0, color="#222222", linewidth=1)
-    plt.title("Residuos por modelo GPU")
+    plt.title("Residuos por modelo")
     plt.xlabel("Modelo")
     plt.ylabel("Predito - real (hg/ha)")
     plt.xticks(rotation=12)
@@ -461,7 +461,7 @@ def save_outputs(df: pd.DataFrame, results: pd.DataFrame, predictions: pd.DataFr
         ax.plot([0, max_value], [0, max_value], color="#b22222", linewidth=1)
         ax.set_xlabel("Real (hg/ha)")
         ax.set_ylabel("Predito (hg/ha)")
-    grid.fig.suptitle("Real vs predito por modelo GPU", y=1.03)
+    grid.fig.suptitle("Real vs predito por modelo", y=1.03)
     grid.tight_layout()
     grid.savefig(FIG_DIR / "gpu_10_real_vs_predito_por_modelo.png", dpi=180)
     plt.close()
@@ -521,7 +521,7 @@ def save_outputs(df: pd.DataFrame, results: pd.DataFrame, predictions: pd.DataFr
         y="valor",
         hue="metrica",
     )
-    plt.title("Comparacao dos modelos GPU")
+    plt.title("Comparacao dos modelos")
     plt.xlabel("Modelo")
     plt.ylabel("Valor")
     plt.xticks(rotation=12)
@@ -529,13 +529,13 @@ def save_outputs(df: pd.DataFrame, results: pd.DataFrame, predictions: pd.DataFr
     plt.savefig(FIG_DIR / "gpu_14_comparacao_modelos_escala_unica.png", dpi=180)
     plt.close()
 
-    summary = f"""# Resultados GPU - Google Colab
+    summary = f"""# Resultados - Google Colab
 
 Dataset: Kaggle `patelris/crop-yield-prediction-dataset`
 
 Registros usados: {len(df):,}
 
-Modelos GPU: XGBoost GPU, CatBoost GPU e MLP PyTorch CUDA.
+Modelos avaliados: MLP, XGBoost e CatBoost.
 
 ## Comparacao dos modelos
 
@@ -563,7 +563,7 @@ Melhor modelo pelo menor RMSE: **{best_name}**.
 
 Yan et al. (2025) reporta Random Forest com R2 = 0,986 e MAE = 348,84; Bagging Regressor com R2 = 0,986 e MAE = 345,51; XGBoost com R2 = 0,973 e MAE = 734,95.
 
-Use esta tabela para atualizar os slides caso o resultado GPU supere ou aproxime o Estudo X.
+Use esta tabela para atualizar os slides caso o resultado supere ou aproxime o Estudo X.
 """
     (RES_DIR / "resultados_gpu.md").write_text(summary, encoding="utf-8")
 
@@ -576,7 +576,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--allow-cpu-fallback",
         action="store_true",
-        help="Permite rodar mesmo sem CUDA. Nao recomendado para a entrega GPU.",
+        help="Permite rodar mesmo sem CUDA. Use apenas para teste local.",
     )
     return parser.parse_args()
 
@@ -603,7 +603,9 @@ def main() -> None:
     predictions = pd.DataFrame({"actual": y})
     rows: list[dict] = []
 
-    xgb_pred, xgb_params = cross_validate_xgboost(X, y, args.folds, args.random_state)
+    xgb_pred, xgb_params = cross_validate_xgboost(
+        X, y, args.folds, args.random_state, cuda_available
+    )
     predictions["pred_XGBoost_GPU"] = xgb_pred
     rows.append(metrics_row("XGBoost_GPU", y, xgb_pred, xgb_params))
 
@@ -621,9 +623,11 @@ def main() -> None:
     save_outputs(df, results, predictions)
 
     print(results.to_string(index=False))
-    print(f"Resultados GPU salvos em: {RES_DIR}")
-    print(f"Figuras GPU salvas em: {FIG_DIR}")
+    print(f"Resultados salvos em: {RES_DIR}")
+    print(f"Figuras salvas em: {FIG_DIR}")
 
 
 if __name__ == "__main__":
     main()
+
+
