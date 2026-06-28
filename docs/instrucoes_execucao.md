@@ -1,39 +1,22 @@
 # Instrucoes de execucao no Google Colab
 
-Passo a passo para reproduzir o trabalho no Google Colab usando o repositorio do GitHub e GPU.
+Passo a passo para reproduzir o trabalho no Google Colab usando o notebook principal e GPU.
 
-Repositorio:
+## 1. Abrir o notebook no Colab
 
-`https://github.com/ichi1ro/trabalho2AM.git`
-
-## 1. Criar o notebook no Colab
-
-1. Acesse o Google Colab.
-2. Crie um novo notebook.
+1. Abra `notebooks/trabalho_agro_previsao_safra.ipynb` no Google Colab.
+2. Execute as celulas na ordem em que aparecem.
 3. No menu, selecione `Runtime > Change runtime type`.
 4. Em `Hardware accelerator`, escolha `T4 GPU`.
 5. Salve a configuracao.
 
-Essa etapa e importante porque o script final foi preparado para rodar MLP, XGBoost e CatBoost com aceleracao por GPU.
+O notebook ja contem a celula responsavel por preparar o acesso ao repositorio. Nao e necessario adicionar manualmente um passo de clonagem nas instrucoes.
 
-## 2. Clonar o repositorio
+Essa configuracao de GPU e importante porque o script final foi preparado para rodar MLP, XGBoost e CatBoost com aceleracao de hardware.
 
-Na primeira celula do Colab, execute:
+## 2. Instalar as bibliotecas
 
-```python
-!git clone https://github.com/ichi1ro/trabalho2AM.git
-%cd trabalho2AM
-```
-
-Se o notebook ja estiver dentro da pasta do repositorio, basta executar:
-
-```python
-%cd /content/trabalho2AM
-```
-
-## 3. Instalar as bibliotecas
-
-Execute:
+Execute a celula de instalacao do notebook. O comando usado e:
 
 ```python
 !pip install -r requirements-colab.txt
@@ -49,9 +32,9 @@ As principais bibliotecas usadas sao:
 - `torch` para a MLP em PyTorch.
 - `kagglehub` para baixar o dataset do Kaggle.
 
-## 4. Baixar o dataset do Kaggle
+## 3. Baixar o dataset do Kaggle
 
-Execute:
+Execute a celula de download. O comando usado e:
 
 ```python
 !python src/download_data.py
@@ -75,7 +58,7 @@ O treinamento usa principalmente:
 data/raw/yield_df.csv
 ```
 
-## 5. Rodar uma execucao rapida de teste
+## 4. Rodar uma execucao rapida de teste
 
 Antes da execucao final, rode uma versao menor para confirmar se o ambiente esta funcionando:
 
@@ -85,7 +68,7 @@ Antes da execucao final, rode uma versao menor para confirmar se o ambiente esta
 
 Essa versao usa uma amostra menor e menos folds. Ela serve apenas para teste tecnico, nao para os resultados finais do trabalho.
 
-## 6. Rodar a execucao final
+## 5. Rodar a execucao final
 
 Depois do teste, rode:
 
@@ -104,7 +87,7 @@ Essa execucao:
 - avalia os modelos com validacao cruzada k-fold;
 - salva metricas, predicoes e figuras.
 
-## 7. Saidas geradas
+## 6. Saidas geradas
 
 Depois da execucao, os arquivos principais ficam em:
 
@@ -136,7 +119,7 @@ Figuras geradas:
 - `outputs/figures_gpu/gpu_13_temperatura_vs_rendimento.png`
 - `outputs/figures_gpu/gpu_14_comparacao_modelos_escala_unica.png`
 
-## 8. Compactar e baixar os resultados
+## 7. Compactar e baixar os resultados
 
 No Colab, execute:
 
@@ -153,7 +136,7 @@ files.download("resultados_trabalho2.zip")
 
 Esse arquivo compactado pode ser usado para atualizar slides e documentos locais.
 
-## 9. Resultados finais de referencia
+## 8. Resultados finais de referencia
 
 A execucao final ja realizada gerou estes resultados:
 
@@ -167,7 +150,7 @@ Melhor modelo por RMSE e R2: MLP.
 
 Melhor modelo por MAE: XGBoost.
 
-## 10. Observacao sobre nomes dos modelos
+## 9. Observacao sobre nomes dos modelos
 
 Nos arquivos gerados pelo Colab, os modelos aparecem com nomes tecnicos:
 
@@ -179,7 +162,7 @@ Nos arquivos gerados pelo Colab, os modelos aparecem com nomes tecnicos:
 
 O sufixo `GPU` ou `CUDA` indica apenas que o treinamento foi executado com aceleracao de hardware. Nos slides, nao e necessario manter esse sufixo.
 
-## 11. Problemas comuns
+## 10. Problemas comuns
 
 ### CUDA nao disponivel
 
@@ -197,14 +180,6 @@ True
 ```
 
 Se vier `False`, volte em `Runtime > Change runtime type` e selecione `T4 GPU`.
-
-### Pasta do repositorio nao encontrada
-
-Se aparecer erro de caminho, volte para a pasta correta:
-
-```python
-%cd /content/trabalho2AM
-```
 
 ### Execucao muito demorada
 

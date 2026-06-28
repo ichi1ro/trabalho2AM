@@ -30,27 +30,9 @@ Melhor modelo por RMSE e R2: MLP.
 
 Melhor modelo por MAE: XGBoost.
 
-## Execucao no Google Colab
-
-No Colab, selecione `Runtime > Change runtime type > T4 GPU` e rode:
-
-```python
-!git clone https://github.com/ichi1ro/trabalho2AM.git
-%cd trabalho2AM
-!pip install -r requirements-colab.txt
-!python src/download_data.py
-!python src/train_evaluate_gpu_colab.py --folds 5
-```
-
-Para teste rapido:
-
-```python
-!python src/train_evaluate_gpu_colab.py --folds 3 --sample-size 6000
-```
-
 ## Arquivos principais
 
-- `notebooks/trabalho_agro_previsao_safra.ipynb`: notebook para entregar ou rodar no Colab.
+- `notebooks/trabalho_agro_previsao_safra.ipynb`: notebook principal para entrega e execucao no Colab. A primeira celula prepara o acesso ao repositorio.
 - `src/download_data.py`: baixa/copia os CSVs do Kaggle.
 - `src/train_evaluate_gpu_colab.py`: versao usada no Colab.
 - `docs/trabalho_academico.md`: texto base do trabalho.
