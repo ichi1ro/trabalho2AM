@@ -30,6 +30,12 @@ Melhor modelo por RMSE e R2: MLP.
 
 Melhor modelo por MAE: XGBoost.
 
+## Execucao
+
+A reproducao do experimento deve ser feita pelo notebook `notebooks/trabalho_agro_previsao_safra.ipynb`.
+
+As instrucoes completas estao em `docs/instrucoes_execucao.md`.
+
 ## Arquivos principais
 
 - `notebooks/trabalho_agro_previsao_safra.ipynb`: notebook principal para entrega e execucao no Colab. A primeira celula prepara o acesso ao repositorio.

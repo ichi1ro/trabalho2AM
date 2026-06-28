@@ -10,8 +10,6 @@ Passo a passo para reproduzir o trabalho no Google Colab usando o notebook princ
 4. Em `Hardware accelerator`, escolha `T4 GPU`.
 5. Salve a configuracao.
 
-O notebook ja contem a celula responsavel por preparar o acesso ao repositorio. Nao e necessario adicionar manualmente um passo de clonagem nas instrucoes.
-
 Essa configuracao de GPU e importante porque o script final foi preparado para rodar MLP, XGBoost e CatBoost com aceleracao de hardware.
 
 ## 2. Instalar as bibliotecas
