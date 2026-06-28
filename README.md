@@ -49,6 +49,7 @@ As instrucoes completas estao em `docs/instrucoes_execucao.md`.
 - `docs/explicacao_variaveis_treinamento.md`: explicacao de cada variavel usada no treinamento.
 - `docs/explicacao_modelos.md`: explicacao aprofundada dos modelos MLP, XGBoost e CatBoost.
 - `docs/explicacao_figuras.md`: explicacao de cada figura gerada.
+- `docs/explicacao_resultados_csv.md`: explicacao dos CSVs de resultados e das metricas.
 
 ## Figuras finais
 
