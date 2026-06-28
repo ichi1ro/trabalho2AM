@@ -115,7 +115,7 @@ Na pratica, isso cumpre a ideia de **grid search** pedida na especificacao.
 
 A funcao `cross_validate_xgboost()` treina o XGBoost.
 
-Explicacao simples:
+Resumo do modelo:
 
 > O XGBoost usa varias arvores de decisao em sequencia. Cada nova arvore tenta corrigir os erros das arvores anteriores.
 
@@ -139,7 +139,7 @@ device="cuda" if use_cuda else "cpu"
 
 A funcao `cross_validate_catboost()` treina o CatBoost.
 
-Explicacao simples:
+Resumo do modelo:
 
 > O CatBoost tambem e um modelo de boosting com arvores. Ele funciona de forma parecida com o XGBoost na ideia geral e costuma ter bom desempenho em dados tabulares.
 
@@ -164,7 +164,7 @@ A classe `MLPRegressorTorch` define a rede neural.
 
 MLP significa **Multilayer Perceptron**, ou perceptron multicamadas.
 
-Explicacao simples:
+Resumo do modelo:
 
 > A MLP e uma rede neural que aprende relacoes nao lineares entre as variaveis de entrada e o rendimento agricola.
 
@@ -237,16 +237,16 @@ Principais graficos:
 - `gpu_07_real_vs_predito_melhor_modelo.png`
 - `gpu_09_residuos_por_modelo.png`
 
-## 16. O que falar se perguntarem sobre o codigo
+## 16. Pontos para defesa oral
 
-Resposta curta:
+Pipeline:
 
 > O codigo baixa a base, cria atributos historicos e climaticos, transforma variaveis categoricas em numericas, treina tres modelos de regressao com validacao cruzada e busca de hiperparametros, calcula RMSE, MAE e R2, e gera tabelas e graficos para comparar os modelos.
 
-Resposta sobre o melhor modelo:
+Melhor modelo:
 
 > A MLP foi melhor pelo RMSE e pelo R2, indicando menor erro geral e maior capacidade de explicar a variacao do rendimento. O XGBoost teve o melhor MAE, indicando menor erro absoluto medio.
 
-Resposta sobre a comparacao com o artigo:
+Comparacao com o artigo:
 
 > O Estudo X reportou R2 de 0,986 para Random Forest e Bagging. Nosso melhor resultado foi R2 de 0,9883 com MLP. Isso indica desempenho competitivo, mas a comparacao deve considerar possiveis diferencas no protocolo experimental.

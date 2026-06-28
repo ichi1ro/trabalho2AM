@@ -18,9 +18,7 @@ Estudo X: Yan et al. (2025), "Crop Yield Time-Series Data Prediction Based on Mu
 
 ## Resultados finais
 
-Os resultados finais estao em:
-
-`C:\Users\spook\Downloads\resultados_trabalho2\outputs`
+Ao executar o pipeline, os arquivos de saida sao gravados em `outputs/results_gpu` e `outputs/figures_gpu`.
 
 | Modelo | RMSE | MAE | R2 |
 |---|---:|---:|---:|
@@ -66,11 +64,7 @@ Para teste rapido:
 
 ## Figuras finais
 
-As figuras finais usadas nos slides estao em:
-
-`C:\Users\spook\Downloads\resultados_trabalho2\outputs\figures_gpu`
-
-As principais sao:
+As figuras geradas ficam em `outputs/figures_gpu`. Para a apresentacao, as mais relevantes sao:
 
 - `gpu_04_comparacao_modelos.png`
 - `gpu_05_erros_modelos.png`

@@ -50,13 +50,12 @@ Melhor modelo por MAE: XGBoost.
 
 ## Arquivos de resultado
 
-Os resultados finais estao em:
+Ao executar o pipeline, os resultados sao gerados em:
 
-`C:\Users\spook\Downloads\resultados_trabalho2\outputs\results_gpu`
+- `outputs/results_gpu`
+- `outputs/figures_gpu`
 
-As figuras finais estao em:
-
-`C:\Users\spook\Downloads\resultados_trabalho2\outputs\figures_gpu`
+Essas pastas nao sao versionadas no Git, pois contem arquivos derivados da execucao.
 
 ## Documentos de apoio
 

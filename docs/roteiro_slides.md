@@ -72,7 +72,7 @@ MLP, XGBoost e CatBoost.
 | XGBoost | Usa arvores em sequencia. Cada nova arvore tenta corrigir os erros das arvores anteriores. Costuma ter desempenho muito forte em tabelas. |
 | CatBoost | Tambem e um modelo de boosting com arvores. Ele e parecido com o XGBoost na ideia geral e costuma funcionar bem em dados tabulares. |
 
-Fala curta sugerida:
+Mensagem principal:
 
 > Escolhemos uma rede neural e dois modelos fortes de boosting com arvores. Assim comparamos uma abordagem neural com modelos de arvores muito usados em dados tabulares.
 
@@ -88,11 +88,11 @@ Tabela final:
 | XGBoost | 9362,52 | 3643,92 | 0,9879 |
 | CatBoost | 9409,89 | 3777,14 | 0,9878 |
 
-Fala curta sugerida:
+Mensagem principal:
 
 > Avaliamos os modelos por RMSE, MAE e R2. RMSE e MAE medem erro, entao quanto menor melhor. R2 mede quanto da variacao do rendimento foi explicada, entao quanto mais perto de 1 melhor.
 
-Fala sobre o resultado:
+Interpretacao do resultado:
 
 > A MLP teve o melhor RMSE e o maior R2, entao foi o melhor modelo geral. O XGBoost teve o menor MAE, mostrando que, em media, seus erros absolutos foram menores. Os tres modelos ficaram muito proximos e com R2 acima de 0,987.
 
@@ -114,6 +114,6 @@ Explicacao:
 
 O trabalho cumpriu o pipeline completo de AM: dataset do Kaggle, selecao de 10 variaveis, tres modelos, validacao cruzada, busca de hiperparametros, metricas e comparacao com Estudo X.
 
-Fala final sugerida:
+Fechamento:
 
 > O melhor modelo foi a MLP, com R2 de 0,9883. Esse valor ficou acima do R2 de 0,986 reportado para Random Forest e Bagging no Estudo X, embora a comparacao precise considerar diferencas de protocolo experimental. Como melhoria futura, poderiamos adicionar dados de solo, manejo agricola e regioes mais detalhadas.

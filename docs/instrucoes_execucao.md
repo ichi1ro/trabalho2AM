@@ -1,6 +1,6 @@
 # Instrucoes de execucao no Google Colab
 
-Este documento mostra como rodar o trabalho completo no Google Colab, usando o repositorio do GitHub e GPU.
+Passo a passo para reproduzir o trabalho no Google Colab usando o repositorio do GitHub e GPU.
 
 Repositorio:
 

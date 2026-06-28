@@ -1,7 +1,5 @@
 # Explicacao das variaveis usadas no treinamento
 
-Este documento explica as variaveis usadas no treinamento dos modelos de previsao de rendimento agricola.
-
 O dataset usado foi o Kaggle `patelris/crop-yield-prediction-dataset`. Entre os CSVs baixados, o trabalho usa principalmente o arquivo `yield_df.csv`, que ja combina informacoes de producao agricola, chuva, temperatura e pesticidas.
 
 ## Objetivo da previsao
@@ -12,7 +10,7 @@ O alvo do modelo e:
 |---|---|---|
 | `hg/ha_yield` | numerica | Rendimento agricola da cultura, medido em hectogramas por hectare. E o valor que os modelos tentam prever. |
 
-Em outras palavras, os modelos recebem informacoes sobre pais/regiao, cultura, ano, clima, manejo e historico produtivo, e tentam prever o rendimento agricola esperado.
+Os modelos recebem informacoes sobre pais/regiao, cultura, ano, clima, manejo e historico produtivo, e retornam uma estimativa de rendimento agricola.
 
 ## Variaveis originais usadas
 

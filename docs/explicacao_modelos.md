@@ -1,6 +1,6 @@
-# Explicacao dos modelos usados
+# Modelos utilizados
 
-Este documento explica, com mais profundidade, os tres modelos treinados no trabalho:
+O experimento final compara tres modelos de regressao:
 
 - MLP: Multi-Layer Perceptron.
 - XGBoost: Extreme Gradient Boosting.
@@ -34,7 +34,7 @@ MLP significa `Multi-Layer Perceptron`, ou Perceptron Multicamadas.
 
 E uma rede neural artificial formada por camadas de neuronios. Cada neuronio faz uma pequena operacao matematica, e o conjunto das camadas aprende relacoes complexas entre as variaveis de entrada e o alvo.
 
-### Como funciona em ideia simples
+### Funcionamento geral
 
 1. O modelo recebe os atributos numericos da amostra.
 2. A primeira camada combina esses atributos com pesos matematicos.
@@ -78,7 +78,7 @@ XGBoost significa `Extreme Gradient Boosting`.
 
 Ele e um modelo baseado em varias arvores de decisao treinadas em sequencia. Cada nova arvore tenta corrigir parte dos erros cometidos pelas arvores anteriores.
 
-### Como funciona em ideia simples
+### Funcionamento geral
 
 1. O modelo cria uma primeira arvore de decisao.
 2. Essa arvore faz previsoes e comete erros.
@@ -125,7 +125,7 @@ Assim como o XGBoost, ele tambem e baseado em boosting com arvores de decisao. A
 
 No script deste trabalho, `Area` e `Item` foram transformadas com one-hot encoding antes do treinamento. Mesmo assim, o CatBoost continua sendo uma boa escolha para comparacao porque e um modelo forte para dados tabulares.
 
-### Como funciona em ideia simples
+### Funcionamento geral
 
 1. O CatBoost treina arvores de decisao em sequencia.
 2. Cada arvore tenta corrigir os erros acumulados.
