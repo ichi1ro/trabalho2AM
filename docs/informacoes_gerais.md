@@ -57,3 +57,11 @@ Os resultados finais estao em:
 As figuras finais estao em:
 
 `C:\Users\spook\Downloads\resultados_trabalho2\outputs\figures_gpu`
+
+## Documentos de apoio
+
+- `docs/instrucoes_execucao.md`: como rodar tudo no Google Colab.
+- `docs/explicacao_variaveis_treinamento.md`: explicacao das variaveis usadas.
+- `docs/explicacao_modelos.md`: explicacao dos modelos treinados.
+- `docs/explicacao_figuras.md`: explicacao das figuras geradas.
+- `docs/explicacao_codigo_treinamento.md`: explicacao do script de treinamento.

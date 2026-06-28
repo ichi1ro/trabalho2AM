@@ -36,16 +36,18 @@ Melhor modelo por MAE: XGBoost.
 
 No Colab, selecione `Runtime > Change runtime type > T4 GPU` e rode:
 
-```bash
-pip install -r requirements-colab.txt
-python src/download_data.py
-python src/train_evaluate_gpu_colab.py --folds 5
+```python
+!git clone https://github.com/ichi1ro/trabalho2AM.git
+%cd trabalho2AM
+!pip install -r requirements-colab.txt
+!python src/download_data.py
+!python src/train_evaluate_gpu_colab.py --folds 5
 ```
 
 Para teste rapido:
 
-```bash
-python src/train_evaluate_gpu_colab.py --folds 3 --sample-size 6000
+```python
+!python src/train_evaluate_gpu_colab.py --folds 3 --sample-size 6000
 ```
 
 ## Arquivos principais
@@ -58,6 +60,9 @@ python src/train_evaluate_gpu_colab.py --folds 3 --sample-size 6000
 - `docs/instrucoes_execucao.md`: instrucoes detalhadas de execucao.
 - `docs/informacoes_gerais.md`: resumo geral do trabalho.
 - `docs/explicacao_codigo_treinamento.md`: explicacao didatica do codigo de treinamento.
+- `docs/explicacao_variaveis_treinamento.md`: explicacao de cada variavel usada no treinamento.
+- `docs/explicacao_modelos.md`: explicacao aprofundada dos modelos MLP, XGBoost e CatBoost.
+- `docs/explicacao_figuras.md`: explicacao de cada figura gerada.
 
 ## Figuras finais
 

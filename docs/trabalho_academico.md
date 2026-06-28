@@ -78,6 +78,26 @@ O melhor modelo pelo menor RMSE foi a MLP. O XGBoost teve o menor MAE, indicando
 
 Comparando com o Estudo X, o R2 final da MLP foi 0,9883, acima dos valores reportados para Random Forest e Bagging no artigo (0,986) e tambem acima do XGBoost reportado no Estudo X (0,973). A comparacao deve considerar que o protocolo experimental nao e necessariamente identico, mas o resultado e competitivo.
 
+### Interpretacao
+
+O melhor modelo pelo menor RMSE e maior R2 foi a MLP. Isso indica que, no experimento final, a rede neural foi a melhor em termos de erro geral e capacidade de explicar a variacao do rendimento agricola.
+
+O XGBoost teve o menor MAE. Isso significa que, considerando o erro absoluto medio, ele teve previsoes ligeiramente mais estaveis em media.
+
+Os tres modelos ficaram muito proximos, todos com R2 acima de 0,987. Isso indica desempenho alto para a tarefa de regressao.
+
+### Comparacao com Estudo X
+
+O Estudo X, Yan et al. (2025), reporta:
+
+| Modelo no Estudo X | Resultado |
+|---|---:|
+| Random Forest | R2 = 0,986 |
+| Bagging Regressor | R2 = 0,986 |
+| XGBoost | R2 = 0,973 |
+
+Comparando com esses valores, a MLP deste trabalho obteve R2 = 0,9883, acima dos resultados reportados no Estudo X. A comparacao deve ser apresentada com cuidado, porque o protocolo de divisao dos dados e validacao pode nao ser identico ao do artigo.
+
 ## 8. Graficos gerados
 
 Os graficos finais estao em `outputs/figures_gpu` dentro do pacote `resultados_trabalho2`:
